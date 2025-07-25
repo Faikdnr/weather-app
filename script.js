@@ -18,25 +18,47 @@ const displayResult = (result) => {
     alert("Şehir bulunamadı veya API hatası!");
     return;
   }
+  document.querySelector(".location-icon").innerText = "📍";
   document.querySelector(
     ".location"
-  ).innerText = `${result.name}, ${result.sys.country}`;
-  document.querySelector(".temp").innerText = `${Math.round(
+  ).innerHTML = `<span class="icon location-icon">📍</span>${result.name}, ${result.sys.country}`;
+
+  document.querySelector(".temp-icon").innerText = "🌡️";
+  document.querySelector(
+    ".temp"
+  ).innerHTML = `<span class="icon temp-icon">🌡️</span>${Math.round(
     result.main.temp
   )}°C`;
 
+  // Açık için 'Güneşli', diğerlerinde baş harfi büyük ve uygun emoji
   let desc = result.weather[0].description;
+  let descIcon = "☀️";
   if (result.weather[0].main.toLowerCase() === "clear") {
     desc = "Güneşli";
+    descIcon = "☀️";
+  } else if (result.weather[0].main.toLowerCase().includes("cloud")) {
+    desc = desc.charAt(0).toUpperCase() + desc.slice(1);
+    descIcon = "☁️";
+  } else if (result.weather[0].main.toLowerCase().includes("rain")) {
+    desc = desc.charAt(0).toUpperCase() + desc.slice(1);
+    descIcon = "🌧️";
   } else {
     desc = desc.charAt(0).toUpperCase() + desc.slice(1);
+    descIcon = "🌈";
   }
-  document.querySelector(".description").innerText = desc;
+  document.querySelector(
+    ".description"
+  ).innerHTML = `<span class="icon description-icon">${descIcon}</span>${desc}`;
 
+  document.querySelector(".humidity-icon").innerText = "💧";
   document.querySelector(
     ".humidity"
-  ).innerText = `Nem: ${result.main.humidity}%`;
-  document.querySelector(".wind").innerText = `Rüzgar: ${Math.round(
+  ).innerHTML = `<span class="icon humidity-icon">💧</span>Nem: ${result.main.humidity}%`;
+
+  document.querySelector(".wind-icon").innerText = "🌬️";
+  document.querySelector(
+    ".wind"
+  ).innerHTML = `<span class="icon wind-icon">🌬️</span>Rüzgar: ${Math.round(
     result.wind.speed * 3.6
   )} km/h`;
 };
